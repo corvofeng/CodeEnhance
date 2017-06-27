@@ -117,10 +117,11 @@ options.restoreDefaultOptions = function () {
 isEnabled = function (request) {
   var url = request.url;
   enabledUrls = options("enabled_urls");
-  if (!localStorage["is_enable"]) {
+  
+  var enabled = localStorage['is_enable'] == 'true';
+  if (!enabled) {
     return false;
   }
-  var enabled = false;
 
   // handle wildcard in enabled urls
   // use array.some so we can escape http://stackoverflow.com/a/2641374/1048479
@@ -131,7 +132,11 @@ isEnabled = function (request) {
   });
 };
 
-getOptions = function() {
+getOptions = function(request) {
+  if (!isEnabled(request)) {
+    return undefined;
+  }
+
   return localStorage; 
 }
 

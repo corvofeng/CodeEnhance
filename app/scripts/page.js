@@ -29,9 +29,19 @@ injectScript = function (url, callback) {
   (document.head || document.documentElement).appendChild(s);
 };
 
-chrome.extension.sendMessage({ method: "getOptions" }, function (options) {
-  console.log(options);
-  if (options['is_enable']) {
+/* ==========================================================================
+   Page Interaction
+   ========================================================================== */
+// see if our page is enabled
+currentDomain = window.location.origin + window.location.pathname;
+
+chrome.extension.sendMessage({ method: "getOptions", url: currentDomain}, function (options) {
+  if(options == undefined) {
+    return;
+  }
+
+  var enabled = options['is_enable'] == 'true';
+  if (enabled) {
 
     editor = new Editors["Ace"](options);
     if (document.readyState == 'complete') {
@@ -43,6 +53,7 @@ chrome.extension.sendMessage({ method: "getOptions" }, function (options) {
         editor.loadDependencies();
       }, false);
     }
+
   }
 
 });
@@ -126,15 +137,11 @@ Editors.Ace.prototype.getDependencies = function () {
   return dependencies;
 };
 
-/* ==========================================================================
-   Page Interaction
-   ========================================================================== */
-// see if our page is enabled
-currentDomain = window.location.origin + window.location.pathname;
 
 chrome.extension.sendMessage({ method: "isEnabled", url: currentDomain }, function (response) {
   // we don't want to do anything if the domain is not enabled
   if (!response) { return; }
+
 });
 
 window.addEventListener("message", function (event) {

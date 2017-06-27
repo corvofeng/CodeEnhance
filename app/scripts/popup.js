@@ -3,7 +3,7 @@ ENUM_FONTSIZE = chrome.extension.getBackgroundPage().ENUM_FONTSIZE;
 ENUM_COLORSCHEME = chrome.extension.getBackgroundPage().ENUM_COLORSCHEME;
 ENUM_FONTFACE = chrome.extension.getBackgroundPage().ENUM_FONTFACE;
 
-var settingInputs = ['font_size', 'color_scheme', 'font_face'];
+var settingInputs = ['font_size', 'color_scheme', 'font_face', 'is_enable'];
 var valueDefault = {
   'font_face' : ENUM_FONTFACE,
   'font_size' : ENUM_FONTSIZE,
@@ -36,8 +36,8 @@ function buildHTML() {
     var key = settingInputs[i];
     var x = getInput(key);
     var enum_data = valueDefault[key];
+    if  (enum_data == undefined) continue;
 
-    console.log(x, enum_data);
     for(var j = 0; j < enum_data.length; j++) {
       var data = enum_data[j];
 
@@ -74,6 +74,10 @@ function restoreOptions() {
       }
     } else if (type === 'textarea') {
       settingElement.value = value;
+    } else if (type == 'input' && settingElement.type == 'checkbox') {
+//      (new Boolean(value) == true)? settingElement.value = true : settingElement;
+      var checked = value == 'true';
+      settingElement.checked = checked;
     }
   }
 }
@@ -102,6 +106,11 @@ function fontFaceChange() {
   options("font_face", face);
   msgSave();
 }
+function enableChange() {
+  var i = this;
+  options("is_enable", this.checked);
+  msgSave();
+}
 
 function msgSave() {
   var save = getInput('save');
@@ -112,13 +121,15 @@ function msgSave() {
   submitChange();
 }
 
+
 document.addEventListener('DOMContentLoaded', initPage);
 document.querySelector('#leet_font').addEventListener('change', fontChange);
 document.querySelector('#leet_theme').addEventListener('change', themeChange);
 document.querySelector('#leet_font_face').addEventListener('change', fontFaceChange);
+document.querySelector('#leet_enable').addEventListener('click', enableChange);
 
 
-
+/*
 document.addEventListener('', function () {
   var default_size = 18;
   var start = 14;
@@ -139,3 +150,4 @@ document.addEventListener('', function () {
   });
 
 });
+*/
