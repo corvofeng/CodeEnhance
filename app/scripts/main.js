@@ -9,8 +9,8 @@ defaults = {
    'https://leetcode.com/*'
   ].join('\n'),
   font_size: 15,
-  color_scheme: '',
-  font_face : '',
+  color_scheme: 'xcode',
+  font_face : 'Source Code Pro',
   show_invisibles: false,
   is_enable: true
 };
@@ -25,7 +25,11 @@ var ENUM_FONTSIZE = [
   19
 ],
 ENUM_FONTFACE = [
-
+  'Source Code Pro',
+  'monospace',
+  'Lucida Console',
+  'consolas',
+  'monaco'
 ],
 ENUM_COLORSCHEME = [
   'xcode',
@@ -43,8 +47,6 @@ ENUM_COLORSCHEME = [
 
 ];
 
-
-
 // our event bus
 // inspired by Vimium
 chrome.extension.onMessage.addListener(function (request, sender, sendResponse) {
@@ -53,8 +55,6 @@ chrome.extension.onMessage.addListener(function (request, sender, sendResponse) 
   }
   return false;
 });
-
-
 
 getCurrentTab = function (callback) {
   chrome.tabs.query({
@@ -131,8 +131,18 @@ isEnabled = function (request) {
   });
 };
 
+getOptions = function() {
+  return localStorage; 
+}
+
+var optionsChange = function() {
+  console.log("The Change has been made");
+}
+
 publicApi = {
   isEnabled: isEnabled,
+  getOptions: getOptions,
+  optionsChange:  optionsChange,
 };
 
 // set defaults (hopefully only once ;)

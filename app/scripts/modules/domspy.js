@@ -24,7 +24,6 @@
     editor.options.version = global.CodeMirror && global.CodeMirror.version || false;
   }
 
-
   global.postMessage({
     type: "DOMSPY",
     editorName: editor.name,

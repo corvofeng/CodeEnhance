@@ -1,3 +1,4 @@
+(function (global) {
 var leeetUtil,
   btnRun,
   btnSub,
@@ -35,10 +36,8 @@ var leeetUtil,
  *    I couldn't modify editor size because of "font-size: 14px !important;", 
  * So I choose to remove this class.
  * 
- * 
- * 
  */
-(function() {
+(function () {
   var btns = document.getElementsByClassName('btn btn-round');
   for (var i = 0; i < btns.length; i++) {
     var btn = btns[i];
@@ -56,7 +55,7 @@ var leeetUtil,
   editor.classList.remove('editor');
 }());
 
-
+leetUtil = {};
 
 LeetEnhance.embedAce = function () {
   var acequire = ace.acequire ? ace.acequire : ace.require
@@ -69,16 +68,30 @@ LeetEnhance.embedAce = function () {
       .setKeyboardHandler(acequire("ace/keyboard/vim").handler);
   });
 
-  leetUtil = {};
   leetUtil.runCode = function () {
     btnRun.click();
   }
   leetUtil.subCode = function () {
     btnSub.click();
   }
-  leetUtil.setFontSize = function(size) {
+  leetUtil.setFontSize = function (size) {
+    alert(size);
     instances[0].env.editor.setFontSize(size);
   }
+  leetUtil.setFontFace = function(fontFace) {
+    instances[0].env.editor.setOption({fontFamily: fontFace});
+  }
+  leetUtil.setTheme = function(theme) {
+    instances[0].env.editor.setTheme('ace/theme/' + theme);
+  }
+  leetUtil.setOptions = function(options) {
+    instances[0].env.editor.setOptions({
+      fontSize: parseInt(options['font_size']),
+      fontFamily: options['font_face'],
+      theme: 'ace/theme/' + options['color_scheme'],
+    });
+  }
+
 
 
   ace.config.loadModule('ace/keyboard/vim', function (module) {
@@ -88,7 +101,6 @@ LeetEnhance.embedAce = function () {
      */
     VimApi.defineEx('write', 'w', function (cm, input) {
       //cm.ace.execCommand('save');
-      leetUtil.setFontSize(18);
       console.log("Just Save");
     });
 
@@ -98,14 +110,14 @@ LeetEnhance.embedAce = function () {
     VimApi.defineEx('run', 'r', function (cm, input) {
       leetUtil.runCode();
     });
-    VimApi.defineEx('submit', 'sub', function(cm, input) {
+    VimApi.defineEx('submit', 'sub', function (cm, input) {
       leeetUtil.subCode();
     });
 
 
     module.CodeMirror.defineExtension("openDialog", function (template, callback, options) {
       var command = prompt("LeetEnhance", ":");
-      if(command == undefined) {
+      if (command == undefined) {
         return;
       }
       callback(command);
@@ -115,4 +127,18 @@ LeetEnhance.embedAce = function () {
   });
 };
 
+
 LeetEnhance.embedAce();
+
+var editor = document.getElementById('UNIQUE_ID_OF_DIV');
+
+editor.addEventListener('option', function (e) {
+  options = e.detail;
+  leetUtil.setOptions(options);
+}, false);
+
+global.postMessage({
+  type: "OPTIONS",
+}, "*");
+
+}(this));
