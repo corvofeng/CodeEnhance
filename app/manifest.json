@@ -1,0 +1,42 @@
+{
+    "name": "LeetEnhance",
+    "version": "0.0.1",
+    "manifest_version": 2,
+    "description": "Enable vim mode in Leetcode editor",
+    "default_locale": "en",
+    "icons": {
+        "64": "images/icon.png"
+    },
+    "browser_action": {
+        "default_icon": "images/icon.png",
+        "default_popup": "html/popup.html"
+    },
+    "background": {
+        "scripts": [
+            "scripts/main.js"
+        ]
+    },
+    "options_page": "html/options.html",
+    "content_scripts": [
+        {
+            "matches": [
+                "<all_urls>"
+            ],
+            "js": [
+                 "scripts/page.js"
+            ]
+        }
+    ],
+    "permissions": [
+        "http://*/*",
+        "https://*/*",
+        "background",
+        "tabs"
+    ],
+    "web_accessible_resources": [
+        "scripts/*",
+        "html/*",
+        "css/*",
+        "images/*"
+    ]
+}
