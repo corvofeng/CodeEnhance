@@ -2,6 +2,8 @@
 
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badge/)    
 
+# LeetCode更换网页编辑器为`CodeMirror`, 我正在尝试写一个新的扩展.
+
 > 简单的增强LeetCode的功能.
 
 * 当前仅支持`Vim`键位. 如果有兴趣, 欢迎添加`Emacs`键位.

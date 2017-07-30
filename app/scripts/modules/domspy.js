@@ -2,8 +2,10 @@
   var editor, acequire;
   var domSpy = {};
 
-  domSpy.cm = global.hasOwnProperty("CodeMirror") ? "CodeMirror" : undefined;
-  domSpy.ace = global.hasOwnProperty("ace") ? "Ace" : undefined;
+  domSpy.cm = global.document.getElementsByClassName("CodeMirror")? "CodeMirror": undefined;
+
+  // Original Ace editor has been changed to codemirror editor. 
+//  domSpy.ace = global.hasOwnProperty("ace") ? "Ace" : undefined;
 
   editor = {
     name: domSpy.cm || domSpy.ace,
@@ -21,6 +23,7 @@
     });
 
   } else if (domSpy.cm) {
+    console.log("Not very happy");
     editor.options.version = global.CodeMirror && global.CodeMirror.version || false;
   }
 

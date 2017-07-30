@@ -29,14 +29,25 @@ injectScript = function (url, callback) {
   (document.head || document.documentElement).appendChild(s);
 };
 
+var injectNakeScript = function (url) {
+  var s = document.createElement('script');
+  s.src = url;
+  (document.head || document.documentElement).appendChild(s);
+};
+
 /* ==========================================================================
    Page Interaction
    ========================================================================== */
 // see if our page is enabled
 currentDomain = window.location.origin + window.location.pathname;
 
-chrome.extension.sendMessage({ method: "getOptions", url: currentDomain}, function (options) {
-  if(options == undefined) {
+injectScript("/scripts/keybindings/codemirror/codemirror.js", function() {
+  injectScript('/scripts/keybindings/codemirror/vim.js');
+});
+
+/*
+chrome.extension.sendMessage({ method: "getOptions", url: currentDomain }, function (options) {
+  if (options == undefined) {
     return;
   }
 
@@ -55,8 +66,8 @@ chrome.extension.sendMessage({ method: "getOptions", url: currentDomain}, functi
     }
 
   }
-
 });
+*/
 
 
 /* ==========================================================================
@@ -122,6 +133,7 @@ Editors.Ace = function () {
   Editor.apply(this, arguments);
 };
 
+/*
 Editors.Ace.prototype = new Editor();
 
 Editors.Ace.prototype.getDependencies = function () {
@@ -137,23 +149,33 @@ Editors.Ace.prototype.getDependencies = function () {
   return dependencies;
 };
 
+*/
 
 chrome.extension.sendMessage({ method: "isEnabled", url: currentDomain }, function (response) {
   // we don't want to do anything if the domain is not enabled
   if (!response) { return; }
 
+  injectScript('/scripts/modules/domspy.js', function () {
+    attachListener();
+  });
 });
 
-window.addEventListener("message", function (event) {
+attachListener = function () {
 
-  if (event.source != window)
-    return;
+  window.addEventListener("message", function (event) {
 
-  // split this out into individual functions
-  if (event.data.type && (event.data.type == "OPTIONS")) {
-    editorElement = document.getElementById('UNIQUE_ID_OF_DIV');
-    var e = new CustomEvent('option', { 'detail': editor.options });
-    editorElement.dispatchEvent(e);
-    isInit = true;
-  }
-}, false);
+    if (event.source != window)
+      return;
+
+    // split this out into individual functions
+    if(event.data.type && (event.data.type = "DOMSPY")) {
+      console.log(event.data);
+    }else if (event.data.type && (event.data.type == "OPTIONS")) {
+      editorElement = document.getElementById('UNIQUE_ID_OF_DIV');
+      var e = new CustomEvent('option', { 'detail': editor.options });
+      editorElement.dispatchEvent(e);
+      isInit = true;
+    }
+  }, false);
+
+}
