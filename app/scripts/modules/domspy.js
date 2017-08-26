@@ -5,7 +5,7 @@
   domSpy.cm = global.document.getElementsByClassName("CodeMirror")? "CodeMirror": undefined;
 
   // Original Ace editor has been changed to codemirror editor. 
-//  domSpy.ace = global.hasOwnProperty("ace") ? "Ace" : undefined;
+  domSpy.ace = global.hasOwnProperty("ace") ? "Ace" : undefined;
 
   editor = {
     name: domSpy.cm || domSpy.ace,

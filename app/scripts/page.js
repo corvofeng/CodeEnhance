@@ -41,19 +41,20 @@ var injectNakeScript = function (url) {
 // see if our page is enabled
 currentDomain = window.location.origin + window.location.pathname;
 
+/*
 injectScript("/scripts/keybindings/codemirror/codemirror.js", function() {
   injectScript('/scripts/keybindings/codemirror/vim.js');
 });
+*/
 
-/*
 chrome.extension.sendMessage({ method: "getOptions", url: currentDomain }, function (options) {
   if (options == undefined) {
     return;
   }
 
+  /*
   var enabled = options['is_enable'] == 'true';
   if (enabled) {
-
     editor = new Editors["Ace"](options);
     if (document.readyState == 'complete') {
       editor.loadDependencies();
@@ -64,11 +65,9 @@ chrome.extension.sendMessage({ method: "getOptions", url: currentDomain }, funct
         editor.loadDependencies();
       }, false);
     }
-
   }
+  */
 });
-*/
-
 
 /* ==========================================================================
    Editor
@@ -133,7 +132,6 @@ Editors.Ace = function () {
   Editor.apply(this, arguments);
 };
 
-/*
 Editors.Ace.prototype = new Editor();
 
 Editors.Ace.prototype.getDependencies = function () {
@@ -149,10 +147,23 @@ Editors.Ace.prototype.getDependencies = function () {
   return dependencies;
 };
 
-*/
+Editors.CM = function() {
+  Editor.apply(this, arguments);
+};
+Editors.CM.prototype = new Editor();
+Editors.CM.prototype.getDependencies = function() {
+  var dependencies = [
+    'scripts/keybindings/codemirror/vim.js',  // 需要看情况进行添加, TODO: 稍后进行重构 
+    'scripts/modules/cm/embed.js',
+  ];
+//  if(!this.options.binding) {
+// }
+  return dependencies;
+}
 
 chrome.extension.sendMessage({ method: "isEnabled", url: currentDomain }, function (response) {
   // we don't want to do anything if the domain is not enabled
+  console.log(response);
   if (!response) { return; }
 
   injectScript('/scripts/modules/domspy.js', function () {
@@ -168,9 +179,23 @@ attachListener = function () {
       return;
 
     // split this out into individual functions
-    if(event.data.type && (event.data.type = "DOMSPY")) {
-      console.log(event.data);
-    }else if (event.data.type && (event.data.type == "OPTIONS")) {
+    console.log(event);
+    if(event.data.type == null) return;
+    if(event.data.type = "DOMSPY") {
+      if(event.data.editorName == 'CodeMirror') {
+        //console.log(event.data);
+        console.log("detect Code Mirror");
+        editor = new Editors["CM"];
+        if (document.readyState == 'complete') {
+          editor.loadDependencies();
+        } else {
+          window.addEventListener('load', function () {
+            editor.loadDependencies();
+          }, false);
+        }
+
+      }
+    }else if (event.data.type == "OPTIONS") {
       editorElement = document.getElementById('UNIQUE_ID_OF_DIV');
       var e = new CustomEvent('option', { 'detail': editor.options });
       editorElement.dispatchEvent(e);

@@ -1,3 +1,33 @@
+var Enum = Object.freeze({
+  Editor: Object.freeze({AceEditor:0 , CodeMirror:1}),
+  FontSize: Object.freeze([13, 14, 15, 16, 17, 18]),
+  FontFace: Object.freeze([
+    'Source Code Pro',
+    'monospace'      ,
+    'Lucida Console' ,
+    'consolas'       , 
+    'monaco'])       ,
+  ColorScheme: Object.freeze([
+    'xcode'          ,
+    'terminal'       ,
+    'ambiance'       ,
+    'monokai'        ,
+    'tomorrow'       ,
+    'twilight'       ,
+    'textmate'       ,
+    'solarized_dark' ,
+    'solarized_light',
+    'chaos'          ,
+    'chrome'         ,
+    'github'         ,
+    ])
+});
+
+
+var pageSet = {
+
+};
+
 var getCurrentTab,
 getCurrentUrl,
 options,
@@ -6,7 +36,9 @@ publicApi,
 restoreDefaultOptions,
 defaults = {
   enabled_urls : [
-   'https://leetcode.com/*'
+   'https://leetcode.com/*',
+   'http://lintcode.com/*',
+   'https://www.nowcoder.com/*'
   ].join('\n'),
   font_size: 15,
   color_scheme: 'xcode',
@@ -44,7 +76,6 @@ ENUM_COLORSCHEME = [
   'chaos',
   'chrome',
   'github',
-
 ];
 
 // our event bus

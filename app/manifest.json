@@ -13,6 +13,7 @@
     },
     "background": {
         "scripts": [
+            "scripts/chromereload.js",
             "scripts/main.js"
         ]
     },
