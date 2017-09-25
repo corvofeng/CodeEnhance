@@ -38,7 +38,8 @@ defaults = {
   enabled_urls : [
    'https://leetcode.com/*',
    'http://lintcode.com/*',
-   'https://www.nowcoder.com/*'
+   'https://interview.nowcoder.com/*',
+   'https://www.nowcoder.com/*',
   ].join('\n'),
   font_size: 15,
   color_scheme: 'xcode',
@@ -144,6 +145,13 @@ options.restoreDefaultOptions = function () {
   }
 };
 
+// set defaults (hopefully only once ;)
+if (! localStorage["initialized"]) {
+  options.restoreDefaultOptions();
+  localStorage["initialized"] = true;
+}
+
+
 // inspired / stolen from Vimium
 isEnabled = function (request) {
   var url = request.url;
@@ -181,8 +189,3 @@ publicApi = {
   optionsChange:  optionsChange,
 };
 
-// set defaults (hopefully only once ;)
-if (! localStorage["initialized"]) {
-  options.restoreDefaultOptions();
-  localStorage["initialized"] = true;
-}

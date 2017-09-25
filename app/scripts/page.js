@@ -153,6 +153,7 @@ Editors.CM = function() {
 Editors.CM.prototype = new Editor();
 Editors.CM.prototype.getDependencies = function() {
   var dependencies = [
+    'scripts/keybindings/codemirror/codemirror.js',
     'scripts/keybindings/codemirror/vim.js',  // 需要看情况进行添加, TODO: 稍后进行重构 
     'scripts/modules/cm/embed.js',
   ];
@@ -174,6 +175,10 @@ chrome.extension.sendMessage({ method: "isEnabled", url: currentDomain }, functi
 attachListener = function () {
 
   window.addEventListener("message", function (event) {
+    console.log("detect Code Mirror---");
+    editor = new Editors["CM"];
+    editor.loadDependencies();
+    console.log("debug over ----");
 
     if (event.source != window)
       return;
