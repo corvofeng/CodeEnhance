@@ -29,12 +29,6 @@ injectScript = function (url, callback) {
   (document.head || document.documentElement).appendChild(s);
 };
 
-var injectNakeScript = function (url) {
-  var s = document.createElement('script');
-  s.src = url;
-  (document.head || document.documentElement).appendChild(s);
-};
-
 /* ==========================================================================
    Page Interaction
    ========================================================================== */
@@ -47,12 +41,25 @@ injectScript("/scripts/keybindings/codemirror/codemirror.js", function() {
 });
 */
 
+// 检查网页是否在支持列表中
+chrome.extension.sendMessage({ method: "isEnabled", url: currentDomain }, function (response) {
+  // we don't want to do anything if the domain is not enabled
+  console.log(response);
+  if (!response) { return; }
+
+  // 使用domspy探测网页中的编辑器的类型
+  injectScript('/scripts/modules/domspy.js', function () {  
+    attachListener();
+  });
+});
+
+
+/*
 chrome.extension.sendMessage({ method: "getOptions", url: currentDomain }, function (options) {
   if (options == undefined) {
     return;
   }
 
-  /*
   var enabled = options['is_enable'] == 'true';
   if (enabled) {
     editor = new Editors["Ace"](options);
@@ -66,8 +73,8 @@ chrome.extension.sendMessage({ method: "getOptions", url: currentDomain }, funct
       }, false);
     }
   }
-  */
 });
+*/
 
 /* ==========================================================================
    Editor
@@ -162,15 +169,6 @@ Editors.CM.prototype.getDependencies = function() {
   return dependencies;
 }
 
-chrome.extension.sendMessage({ method: "isEnabled", url: currentDomain }, function (response) {
-  // we don't want to do anything if the domain is not enabled
-  console.log(response);
-  if (!response) { return; }
-
-  injectScript('/scripts/modules/domspy.js', function () {
-    attachListener();
-  });
-});
 
 attachListener = function () {
 

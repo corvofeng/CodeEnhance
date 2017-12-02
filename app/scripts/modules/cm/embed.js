@@ -1,9 +1,11 @@
 (function (global) {
   console.log("Code Mirror embed");
+  //console.log("start")
+
 
   var cm = global.document.getElementsByClassName('CodeMirror')[0].CodeMirror;
   // cm.CodeMirror.setOption('theme', 'monokai');
-  cm.setOption('keyMap', 'vim');
+  //cm.setOption('keyMap', 'vim');
   cm.getWrapperElement().style.fontSize = '18px';
   cm.getWrapperElement().style.fontFamily = 'Consolas, Source Code Pro';
   // CodeMirror.keyMap.default["Tab"] = "indentMore";

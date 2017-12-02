@@ -14,7 +14,7 @@
     "background": {
         "scripts": [
             "scripts/chromereload.js",
-            "scripts/main.js"
+            "scripts/backend.js"
         ]
     },
     "options_page": "html/options.html",

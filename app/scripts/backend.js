@@ -82,27 +82,29 @@ ENUM_COLORSCHEME = [
 // our event bus
 // inspired by Vimium
 chrome.extension.onMessage.addListener(function (request, sender, sendResponse) {
+  console.log(request)
+  console.log(sender)
   if (publicApi[request.method]) {
-    sendResponse(publicApi[request.method](request));
+    sendResponse(publicApi[request.method](request))
   }
-  return false;
-});
+  return false
+})
 
 getCurrentTab = function (callback) {
   chrome.tabs.query({
     active: true,
     lastFocusedWindow: true
   }, function (tabs) {
-    var tab = tabs[0];
-    callback(tab);
-  });
-};
+    var tab = tabs[0]
+    callback(tab)
+  })
+}
 
 getCurrentUrl = function (callback) {
   getCurrentTab(function (tab) {
-    return tab.url;
-  });
-};
+    return tab.url
+  })
+}
 
 /**
  * Get and Set for localstorage based options
@@ -180,8 +182,14 @@ getOptions = function(request) {
 }
 
 var optionsChange = function() {
-  console.log("The Change has been made");
+  console.log("The Change has been made")
 }
+
+// 安装时
+chrome.runtime.onInstalled.addListener(function (details) {
+  console.log(details)
+  console.log('previousVersion', details.previousVersion)
+});
 
 publicApi = {
   isEnabled: isEnabled,
