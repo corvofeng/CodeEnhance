@@ -82,8 +82,6 @@ ENUM_COLORSCHEME = [
 // our event bus
 // inspired by Vimium
 chrome.extension.onMessage.addListener(function (request, sender, sendResponse) {
-  console.log(request)
-  console.log(sender)
   if (publicApi[request.method]) {
     sendResponse(publicApi[request.method](request))
   }

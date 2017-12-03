@@ -22,11 +22,17 @@ var Editors = {},
  * @param  {function} callback  optional callback to be fired on script 'onload' event
  */
 injectScript = function (url, callback) {
-  var s = document.createElement('script');
-  s.src = chrome.extension.getURL(url);
+  if (url == null) {
+    return
+  }
+
+  var s = document.createElement('script')
+  s.src = chrome.extension.getURL(url)
   // @todo potentially remove parentNode here and then call callback?
-  s.onload = callback;
-  (document.head || document.documentElement).appendChild(s);
+  if (callback != null) {
+    s.onload = callback
+  }
+  (document.head || document.documentElement).appendChild(s)
 };
 
 /* ==========================================================================
@@ -41,18 +47,71 @@ injectScript("/scripts/keybindings/codemirror/codemirror.js", function() {
 });
 */
 
-// 检查网页是否在支持列表中
+// 不同站点与其对应js
+var host2js = {
+  "leetcode.com": "/scripts/page/leetcode.js",
+  "www.nowcoder.com": "/scripts/page/nowcoder.js",
+}
+
+var loadHostJs = function() {
+  if(host2js[window.location.host]) {
+    injectScript(host2js[window.location.host], function () {
+      console.log("load js ok")
+    })
+  } else { // 需要支持的网页, 发送开发者
+    console.log("cur host needed to be added ", window.location.host)
+  }
+}
+
+/**
+ * 检查网页是否在支持列表中, 并返回网页类型, 而后将会导入不同的js
+ */
 chrome.extension.sendMessage({ method: "isEnabled", url: currentDomain }, function (response) {
   // we don't want to do anything if the domain is not enabled
-  console.log(response);
-  if (!response) { return; }
+  console.log(response)
+  if (!response) { return }
+  var dependencies = [
+    'scripts/keybindings/codemirror/codemirror.js',
+    'scripts/keybindings/codemirror/vim.js',  // 需要看情况进行添加, TODO: 稍后进行重构 
+    'scripts/modules/cm/embed.js',
+  ]
 
-  // 使用domspy探测网页中的编辑器的类型
-  injectScript('/scripts/modules/domspy.js', function () {  
-    attachListener();
-  });
+  load(dependencies, 0, loadHostJs)
+
+  // 使用domspy探测网页中的编辑器的类型, 目前暂时不支持
+  // injectScript('/scripts/modules/domspy.js', function () {  
+  //  attachListener();
+  //});
 });
 
+/**
+ * Provide an "orderly" load of dependencies
+ * @param  {array} sources array of extension root relative js files
+ * @param  {int} current current member of source arary (internal use only)
+ */
+load = function (sources, current, callback) {
+  current = typeof current === 'undefined' ? 0 : current
+  if (current >= sources.length) {
+    return
+  }
+
+  var next = function () {
+    load(sources, current + 1, callback)
+  };
+
+  if (typeof sources[current] === 'undefined' || sources[current] === '') {
+    next()
+  }
+
+  console.log("load ", sources[current])
+  if (current == sources.length - 1) {   // 注入最后一个js文件时, 使用回调函数
+    injectScript(sources[current], callback)
+  } else {
+    injectScript(sources[current], function () {
+      next();
+    });
+  }
+};
 
 /*
 chrome.extension.sendMessage({ method: "getOptions", url: currentDomain }, function (options) {
@@ -79,29 +138,7 @@ chrome.extension.sendMessage({ method: "getOptions", url: currentDomain }, funct
 /* ==========================================================================
    Editor
    ========================================================================== */
-/**
- * Provide an "orderly" load of dependencies
- * @param  {array} sources array of extension root relative js files
- * @param  {int} current current member of source arary (internal use only)
- */
-load = function (sources, current) {
-  current = typeof current === 'undefined' ? 0 : current;
-  if (current >= sources.length) {
-    return;
-  }
 
-  var next = function () {
-    load(sources, current + 1);
-  };
-
-  if (typeof sources[current] === 'undefined' || sources[current] === '') {
-    next();
-  } else {
-    injectScript(sources[current], function () {
-      next();
-    });
-  }
-};
 
 /**
  * A small configurable class to normalize interaction with dom-based editor
@@ -154,22 +191,22 @@ Editors.Ace.prototype.getDependencies = function () {
   return dependencies;
 };
 
-Editors.CM = function() {
+Editors.CM = function () {
   Editor.apply(this, arguments);
 };
 Editors.CM.prototype = new Editor();
-Editors.CM.prototype.getDependencies = function() {
+Editors.CM.prototype.getDependencies = function () {
   var dependencies = [
     'scripts/keybindings/codemirror/codemirror.js',
     'scripts/keybindings/codemirror/vim.js',  // 需要看情况进行添加, TODO: 稍后进行重构 
     'scripts/modules/cm/embed.js',
   ];
-//  if(!this.options.binding) {
-// }
+  //  if(!this.options.binding) {
+  // }
   return dependencies;
 }
 
-
+// 通过此函数获取
 attachListener = function () {
 
   window.addEventListener("message", function (event) {
@@ -183,9 +220,9 @@ attachListener = function () {
 
     // split this out into individual functions
     console.log(event);
-    if(event.data.type == null) return;
-    if(event.data.type = "DOMSPY") {
-      if(event.data.editorName == 'CodeMirror') {
+    if (event.data.type == null) return;
+    if (event.data.type = "DOMSPY") {
+      if (event.data.editorName == 'CodeMirror') {
         //console.log(event.data);
         console.log("detect Code Mirror");
         editor = new Editors["CM"];
@@ -198,7 +235,7 @@ attachListener = function () {
         }
 
       }
-    }else if (event.data.type == "OPTIONS") {
+    } else if (event.data.type == "OPTIONS") {
       editorElement = document.getElementById('UNIQUE_ID_OF_DIV');
       var e = new CustomEvent('option', { 'detail': editor.options });
       editorElement.dispatchEvent(e);
