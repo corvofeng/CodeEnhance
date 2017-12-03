@@ -1,7 +1,40 @@
 (function (global) {
     console.log("Code Mirror embed")
-    //console.log("start")
+    
+    var defaultOption = {
+      "mode": "text/x-c++src",
+      "keyMap": "vim",
+      "theme": "monokai",
+      "lineNumbers": true,
+      "lineWrapping": true,
+      "indentWithTabs": false,
+      "autofocus": true,
+      "tabSize": 4,
+      "gutters": [
+        "CodeMirror-linenumbers",
+        "CodeMirror-foldgutter"
+      ],
+      "styleActiveLine": true,
+      "matchBrackets": true,
+    }
   
+    var onInit = function() {
+
+    }
+
+    var onGetOption = function() {
+
+    }
+
+    var onRefreshOption = function() {
+
+    }
+
+    var onEventCapture = function() {
+
+    }
+
+
   
     var oldCmDiv = global.document.getElementsByClassName('CodeMirror')[1]
     oldCmDiv.style.display = 'none'
@@ -16,7 +49,7 @@
     var reactCM = document.getElementsByClassName("ReactCodeMirror")[0]
     var myArea = reactCM.appendChild(input)
 
-    var myCodeMirror = CodeMirror.fromTextArea(myArea)
+    var myCodeMirror = CodeMirror.fromTextArea(myArea, defaultOption)
     oldCm.getValue = function() {
       return myCodeMirror.getValue()
     }
@@ -29,11 +62,11 @@
       oldCm.save()
     }
 
+    /*
     $("reset-btn btn btn-default").on("click",function(){
       alert("The paragraph was clicked.");
     });
   
-    /*
     cm.setOption("extraKeys", {
       Tab: function (cm) {  // 使用空格缩进
         var unit = cm.getOption("indentUnit");

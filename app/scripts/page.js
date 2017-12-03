@@ -12,19 +12,18 @@ var Editors = {},
   isInit;
 
 
-/* ==========================================================================
-   Helpers
-   ========================================================================== */
 /**
+ * <script src="codemirror.js"></script>
  * Load "in-dom" js resources to get around
  * Chrome's seperation of extension / page DOM.
  * @param  {string} url path to js file from extension root
  * @param  {function} callback  optional callback to be fired on script 'onload' event
  */
-injectScript = function (url, callback) {
+injectScript = function(url, callback) {
   if (url == null) {
     return
   }
+  console.log(url)
 
   var s = document.createElement('script')
   s.src = chrome.extension.getURL(url)
@@ -34,6 +33,22 @@ injectScript = function (url, callback) {
   }
   (document.head || document.documentElement).appendChild(s)
 };
+
+/**
+ * <link rel="stylesheet" type="text/css" href="style.css">
+ * @param {string} url path to css file from extension root
+ */
+injectStyleSheet = function(url) {
+  if (url == null) {
+    return
+  }
+
+  var s = document.createElement('link')
+  s.rel = "stylesheet"
+  s.type = "text/css"
+  s.href = chrome.extension.getURL(url)
+  (document.head || document.documentElement).appendChild(s)
+}
 
 /* ==========================================================================
    Page Interaction
@@ -53,6 +68,42 @@ var host2js = {
   "www.nowcoder.com": "/scripts/page/nowcoder.js",
 }
 
+var addonSource = {
+  "search": {
+    "js": ['scripts/cm/addon/search/search.js', "scripts/cm/addon/search/searchcursor.js"],
+    "css": []
+  },
+  "dialog": {
+    "js": ['scripts/cm/addon/dialog/dialog.js'],
+    "css": ['scripts/cm/addon/dialog/dialog.css']
+  }
+}
+
+var addons = (function() {
+  let dependenciesCSS = []
+  let dependenciesJS = [
+    'scripts/cm/codemirror.js',
+    'scripts/cm/keymap/vim.js',
+    'scripts/cm/keymap/sublime.js',
+    'scripts/cm/keymap/emacs.js',
+  ]
+
+  return {
+    addAddon : function(addon) {
+      if(addonSource[addon]) {
+        dependenciesJS = dependenciesJS.concat(addonSource[addon].js)
+        dependenciesCSS = dependenciesCSS.concat(addonSource[addon].css)
+      }
+    },
+    getAddon: function() {
+      return {'js':dependenciesJS, 'css':dependenciesCSS}
+    }
+  }
+
+})()
+
+
+
 var loadHostJs = function() {
   if(host2js[window.location.host]) {
     injectScript(host2js[window.location.host], function () {
@@ -70,13 +121,15 @@ chrome.extension.sendMessage({ method: "isEnabled", url: currentDomain }, functi
   // we don't want to do anything if the domain is not enabled
   console.log(response)
   if (!response) { return }
-  var dependencies = [
-    'scripts/keybindings/codemirror/codemirror.js',
-    'scripts/keybindings/codemirror/vim.js',  // 需要看情况进行添加, TODO: 稍后进行重构 
-    'scripts/modules/cm/embed.js',
-  ]
 
-  load(dependencies, 0, loadHostJs)
+  addons.addAddon('search')
+  addons.addAddon('dialog')
+
+  var dep = addons.getAddon()
+
+  console.log(dep)
+  loadJS(dep.js, 0, loadHostJs)
+  loadCSS(dep.css, 0)
 
   // 使用domspy探测网页中的编辑器的类型, 目前暂时不支持
   // injectScript('/scripts/modules/domspy.js', function () {  
@@ -84,19 +137,40 @@ chrome.extension.sendMessage({ method: "isEnabled", url: currentDomain }, functi
   //});
 });
 
-/**
- * Provide an "orderly" load of dependencies
- * @param  {array} sources array of extension root relative js files
- * @param  {int} current current member of source arary (internal use only)
- */
-load = function (sources, current, callback) {
+var loadCSS = function(sources, current) {
   current = typeof current === 'undefined' ? 0 : current
   if (current >= sources.length) {
     return
   }
 
   var next = function () {
-    load(sources, current + 1, callback)
+    loadCSS(sources, current + 1)
+  };
+
+  if (typeof sources[current] === 'undefined' || sources[current] === '') {
+    next()
+  } else {
+    console.log("load ", sources[current])
+    injectStyleSheet(sources[current], function () {
+      next();
+    });
+  }
+
+}
+
+/**
+ * Provide an "orderly" load of dependencies
+ * @param  {array} sources array of extension root relative js files
+ * @param  {int} current current member of source arary (internal use only)
+ */
+var loadJS = function (sources, current, callback) {
+  current = typeof current === 'undefined' ? 0 : current
+  if (current >= sources.length) {
+    return
+  }
+
+  var next = function () {
+    loadJS(sources, current + 1, callback)
   };
 
   if (typeof sources[current] === 'undefined' || sources[current] === '') {
@@ -197,10 +271,13 @@ Editors.CM = function () {
 Editors.CM.prototype = new Editor();
 Editors.CM.prototype.getDependencies = function () {
   var dependencies = [
-    'scripts/keybindings/codemirror/codemirror.js',
-    'scripts/keybindings/codemirror/vim.js',  // 需要看情况进行添加, TODO: 稍后进行重构 
-    'scripts/modules/cm/embed.js',
+    'scripts/cm/codemirror.js',
+    'scripts/cm/vim.js',  // 需要看情况进行添加
+   // 'scripts/cm/addon/search/search.js',  // 需要看情况进行添加
+   // 'scripts/cm/addon/dialog/dialog.js',  // 需要看情况进行添加
   ];
+
+  //'scripts/modules/cm/embed.js',
   //  if(!this.options.binding) {
   // }
   return dependencies;
