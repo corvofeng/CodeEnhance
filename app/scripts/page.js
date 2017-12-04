@@ -75,11 +75,22 @@ var addonSource = {
   "dialog": {
     "js": ['scripts/cm/addon/dialog/dialog.js'],
     "css": ['scripts/cm/addon/dialog/dialog.css']
+  },
+  "hint": {
+    "js": ['scripts/cm/addon/hint/show-hint.js', 'scripts/cm/addon/hint/anyword-hint.js'],
+    "css": ['scripts/cm/addon/hint/show-hint.css']
+  },
+  "clike": {
+    "js": ["scripts/cm/mode/clike/clike.js"]
   }
 }
 
+/**
+ * 这其实也是一种js的单例模式, 同时只能通过addons这个对象来操作其中的数据
+ */
 var addons = (function() {
-  let dependenciesCSS = []
+  let dependenciesCSS = [
+  ]
   let dependenciesJS = [
     'scripts/cm/codemirror.js',
     'scripts/cm/keymap/vim.js',
@@ -102,7 +113,6 @@ var addons = (function() {
 })()
 
 
-
 var loadHostJs = function() {
   if(host2js[window.location.host]) {
     injectScript(host2js[window.location.host], function () {
@@ -123,6 +133,8 @@ chrome.extension.sendMessage({ method: "isEnabled", url: currentDomain }, functi
 
   addons.addAddon('search')
   addons.addAddon('dialog')
+  addons.addAddon('hint')
+  addons.addAddon('clike')
 
   var dep = addons.getAddon()
 

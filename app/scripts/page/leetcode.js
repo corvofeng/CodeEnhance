@@ -16,6 +16,9 @@
       ],
       "styleActiveLine": true,
       "matchBrackets": true,
+      "value": null,
+      "scrollbarStyle": null,
+
     }
   
     var onInit = function() {
@@ -39,6 +42,10 @@
     var oldCmDiv = global.document.getElementsByClassName('CodeMirror')[1]
     oldCmDiv.style.display = 'none'
     var oldCm = oldCmDiv.CodeMirror
+    console.log(oldCm)
+    defaultOption.value = oldCm.value
+    
+    debugger
     // cm.CodeMirror.setOption('theme', 'monokai');
     //cm.setOption('keyMap', 'vim');
     oldCm.getWrapperElement().style.fontSize = '18px'
@@ -66,8 +73,9 @@
     $("reset-btn btn btn-default").on("click",function(){
       alert("The paragraph was clicked.");
     });
+    */
   
-    cm.setOption("extraKeys", {
+    myCodeMirror.setOption("extraKeys", {
       Tab: function (cm) {  // 使用空格缩进
         var unit = cm.getOption("indentUnit");
         var col = cm.getCursor().ch;
@@ -75,6 +83,5 @@
         cm.replaceSelection(spaces);
       }
     });
-    */
   
   })(this);
