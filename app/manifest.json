@@ -35,9 +35,6 @@
         "tabs"
     ],
     "web_accessible_resources": [
-        "scripts/*",
-        "html/*",
-        "css/*",
-        "images/*"
+        "scripts/*"
     ]
 }

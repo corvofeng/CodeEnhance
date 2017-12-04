@@ -20,18 +20,16 @@ var Editors = {},
  * @param  {function} callback  optional callback to be fired on script 'onload' event
  */
 injectScript = function(url, callback) {
-  if (url == null) {
-    return
-  }
-  console.log(url)
-
+  if (url == null)  return
+  
   var s = document.createElement('script')
-  s.src = chrome.extension.getURL(url)
+  s.src = chrome.runtime.getURL(url)
   // @todo potentially remove parentNode here and then call callback?
   if (callback != null) {
     s.onload = callback
   }
-  (document.head || document.documentElement).appendChild(s)
+  document.head == null ? document.head.appendChild(s) 
+                          : document.documentElement.appendChild(s)
 };
 
 /**
@@ -39,15 +37,16 @@ injectScript = function(url, callback) {
  * @param {string} url path to css file from extension root
  */
 injectStyleSheet = function(url) {
-  if (url == null) {
-    return
-  }
+
+  if (url == null)  return
 
   var s = document.createElement('link')
-  s.rel = "stylesheet"
   s.type = "text/css"
-  s.href = chrome.extension.getURL(url)
-  (document.head || document.documentElement).appendChild(s)
+  s.rel = "stylesheet"
+  s.href = chrome.runtime.getURL(url)
+
+  document.head == null ? document.head.appendChild(s)
+                            :document.documentElement.appendChild(s)
 }
 
 /* ==========================================================================
@@ -130,12 +129,8 @@ chrome.extension.sendMessage({ method: "isEnabled", url: currentDomain }, functi
   console.log(dep)
   loadJS(dep.js, 0, loadHostJs)
   loadCSS(dep.css, 0)
-
-  // 使用domspy探测网页中的编辑器的类型, 目前暂时不支持
-  // injectScript('/scripts/modules/domspy.js', function () {  
-  //  attachListener();
-  //});
 });
+
 
 var loadCSS = function(sources, current) {
   current = typeof current === 'undefined' ? 0 : current
@@ -145,7 +140,7 @@ var loadCSS = function(sources, current) {
 
   var next = function () {
     loadCSS(sources, current + 1)
-  };
+  }
 
   if (typeof sources[current] === 'undefined' || sources[current] === '') {
     next()
@@ -155,11 +150,11 @@ var loadCSS = function(sources, current) {
       next();
     });
   }
-
 }
 
+
 /**
- * Provide an "orderly" load of dependencies
+ *  使用回调的方式, 防止js懒惰加载
  * @param  {array} sources array of extension root relative js files
  * @param  {int} current current member of source arary (internal use only)
  */
@@ -171,12 +166,11 @@ var loadJS = function (sources, current, callback) {
 
   var next = function () {
     loadJS(sources, current + 1, callback)
-  };
+  }
 
   if (typeof sources[current] === 'undefined' || sources[current] === '') {
     next()
   }
-
   console.log("load ", sources[current])
   if (current == sources.length - 1) {   // 注入最后一个js文件时, 使用回调函数
     injectScript(sources[current], callback)
@@ -185,7 +179,8 @@ var loadJS = function (sources, current, callback) {
       next();
     });
   }
-};
+}
+
 
 /*
 chrome.extension.sendMessage({ method: "getOptions", url: currentDomain }, function (options) {
