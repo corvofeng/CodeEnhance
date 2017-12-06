@@ -15,6 +15,5 @@ app/scripts.babel/
 bower.json
 gulpfile.babel.js
 package-lock.json
-package.json
 test/
 
