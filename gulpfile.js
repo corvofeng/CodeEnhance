@@ -3,7 +3,6 @@ var webpack = require('webpack')
 var gulpWebpack = require('gulp-webpack')
 var livereload = require('gulp-livereload');
 
-
 gulp.task('bundle', function () {
   gulp.src('app/scripts/page.js')
     .pipe(gulpWebpack({
@@ -28,6 +27,7 @@ gulp.task('html', function () {
   livereload.reload();
 });
 
+// 只监听app/dest/main.js文件的变化
 gulp.task('watch', function () {
   livereload.listen()
   gulp.watch([
