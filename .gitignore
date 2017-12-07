@@ -1,5 +1,5 @@
 node_modules
-app/dest/main.js
+app/dest/*.js
 temp
 .tmp
 dist
