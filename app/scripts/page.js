@@ -11,7 +11,8 @@ var Editors = {},
   editorElement,
   isInit;
 
-import CodeMirror from 'codemirror/lib/codemirror'
+//import CodeMirror from 'codemirror/lib/codemirror'
+//import {leetcodeRun} from './page/leetcode'
 
 
 /**
@@ -65,8 +66,8 @@ injectScript("/scripts/keybindings/codemirror/codemirror.js", function() {
 
 // 不同站点与其对应js
 var host2js = {
-  "leetcode.com": "/scripts/page/leetcode.js",
-  "www.nowcoder.com": "/scripts/page/nowcoder.js",
+  "leetcode.com": "/dest/leetcode.js",
+  "www.nowcoder.com": "/dest/nowcoder.js",
 }
 
 var addonSource = {
@@ -128,30 +129,32 @@ var loadHostJs = function() {
 var injectRequire = function() {
   var s = document.createElement('script')
   s.src = chrome.runtime.getURL('scripts/require.js')
-  s.
   document.head == null ? document.head.appendChild(s) 
                           : document.documentElement.appendChild(s)
 }
 
-/**
- * 检查网页是否在支持列表中, 并返回网页类型, 而后将会导入不同的js
- */
-chrome.extension.sendMessage({ method: "isEnabled", url: currentDomain }, function (response) {
-  // we don't want to do anything if the domain is not enabled
-  console.log(response)
-  if (!response) { return }
-  addons.addAddon('search')
-  addons.addAddon('dialog')
-  addons.addAddon('hint')
-  addons.addAddon('clike')
-
-  var dep = addons.getAddon()
-
-  console.log(dep)
-  loadJS(dep.js, 0, loadHostJs)
-  loadCSS(dep.css, 0)
-});
-
+  /**
+   * 检查网页是否在支持列表中, 并返回网页类型, 而后将会导入不同的js
+   */
+  chrome.extension.sendMessage({ method: "isEnabled", url: currentDomain }, function (response) {
+    // we don't want to do anything if the domain is not enabled
+    console.log(response)
+    if (!response) { return }
+    //leetcodeRun()
+    loadHostJs()
+    /*
+    addons.addAddon('search')
+    addons.addAddon('dialog')
+    addons.addAddon('hint')
+    addons.addAddon('clike')
+    
+    var dep = addons.getAddon()
+    
+    console.log(dep)
+    loadJS(dep.js, 0, loadHostJs)
+    loadCSS(dep.css, 0)
+    */
+  });
 
 var loadCSS = function(sources, current) {
   current = typeof current === 'undefined' ? 0 : current

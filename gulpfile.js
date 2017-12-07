@@ -3,12 +3,17 @@ var webpack = require('webpack')
 var gulpWebpack = require('gulp-webpack')
 var livereload = require('gulp-livereload');
 
+var entryPointsPathPrefix = './app/scripts/page/';
+
 gulp.task('bundle', function () {
-  gulp.src('app/scripts/page.js')
+  gulp.src('app/scripts/page')
     .pipe(gulpWebpack({
         watch: true,
+        entry : {
+          leetcode: entryPointsPathPrefix + 'leetcode.js',
+        },
         output: {
-          filename: 'main.js',
+          filename: '[name].js',
         //  chunkFilename: "[id].js",
         //  path: path.resolve(__dirname, 'dist')
         },
@@ -31,7 +36,7 @@ gulp.task('html', function () {
 gulp.task('watch', function () {
   livereload.listen()
   gulp.watch([
-    './app/dest/main.js'
+    './app/dest/*.js'
   ], ['html']);
 })
 

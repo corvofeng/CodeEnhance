@@ -1,4 +1,13 @@
-(function (global) {
+'use strict'
+
+import CodeMirror from 'codemirror/lib/codemirror'
+import 'codemirror/keymap/vim'
+//require('codemirror/addon/dialog');
+//import 'codemirror/addon/dialog.css'
+import CodeMirrorLoadMode from 'codemirror/addon/dialog/dialog'
+import 'codemirror/addon/dialog/dialog.css'
+
+var leetcodeRun = function () {
     console.log("Code Mirror embed")
     
     var defaultOption = {
@@ -37,12 +46,13 @@
 
     }
 
+    var oldCmDiv = document.getElementsByClassName('CodeMirror')[1]
+    while(typeof oldCmDiv.CodeMirror == "undefined") {}
 
-  
-    var oldCmDiv = global.document.getElementsByClassName('CodeMirror')[1]
-    oldCmDiv.style.display = 'none'
     var oldCm = oldCmDiv.CodeMirror
     console.log(oldCm)
+  
+    oldCmDiv.style.display = 'none'
     defaultOption.value = oldCm.value
     
     debugger
@@ -84,4 +94,6 @@
       }
     });
   
-  })(this);
+}
+
+leetcodeRun();
