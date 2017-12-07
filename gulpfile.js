@@ -9,7 +9,8 @@ gulp.task('bundle', function () {
   gulp.src('app/scripts/page')
     .pipe(gulpWebpack({
         watch: true,
-        entry : {
+        entry : {   // 多出口打包, 针对不同的网站分别打包
+          // nowcoder: entryPointsPathPrefix + 'nowcoder.js'
           leetcode: entryPointsPathPrefix + 'leetcode.js',
         },
         output: {
@@ -36,9 +37,8 @@ gulp.task('html', function () {
 gulp.task('watch', function () {
   livereload.listen()
   gulp.watch([
-    './app/dest/*.js'
+    './app/dest/*'
   ], ['html']);
 })
-
 
 gulp.task('default', ['watch', 'bundle']);

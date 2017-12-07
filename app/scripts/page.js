@@ -133,28 +133,26 @@ var injectRequire = function() {
                           : document.documentElement.appendChild(s)
 }
 
-  /**
-   * 检查网页是否在支持列表中, 并返回网页类型, 而后将会导入不同的js
-   */
-  chrome.extension.sendMessage({ method: "isEnabled", url: currentDomain }, function (response) {
-    // we don't want to do anything if the domain is not enabled
-    console.log(response)
-    if (!response) { return }
-    //leetcodeRun()
-    loadHostJs()
-    /*
-    addons.addAddon('search')
-    addons.addAddon('dialog')
-    addons.addAddon('hint')
-    addons.addAddon('clike')
-    
-    var dep = addons.getAddon()
-    
-    console.log(dep)
-    loadJS(dep.js, 0, loadHostJs)
-    loadCSS(dep.css, 0)
-    */
-  });
+/**
+ * 检查网页是否在支持列表中, 并返回网页类型, 而后将会导入不同的js
+ */
+chrome.extension.sendMessage({ method: "isEnabled", url: currentDomain }, function (response) {
+  // we don't want to do anything if the domain is not enabled
+  console.log(response)
+  if (!response) { return }
+  //leetcodeRun()
+  loadHostJs()
+  /*
+  addons.addAddon('search')
+  addons.addAddon('dialog')
+  addons.addAddon('hint')
+  addons.addAddon('clike')
+  var dep = addons.getAddon()
+  console.log(dep)
+  loadJS(dep.js, 0, loadHostJs)
+  loadCSS(dep.css, 0)
+  */
+});
 
 var loadCSS = function(sources, current) {
   current = typeof current === 'undefined' ? 0 : current
