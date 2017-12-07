@@ -11,6 +11,8 @@ var Editors = {},
   editorElement,
   isInit;
 
+import CodeMirror from 'codemirror/lib/codemirror'
+
 
 /**
  * <script src="codemirror.js"></script>
