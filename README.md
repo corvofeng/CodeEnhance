@@ -10,6 +10,12 @@
 > I'm sorry for my English expression. If you have any questions, please 
 > contact me or create an issue.
 
+
+```bash
+npm install
+gulp bundle
+```
+
 ## DEMAND
 
   At the beginning of coding in `LeetCode`, I has been using the local `Vim` 

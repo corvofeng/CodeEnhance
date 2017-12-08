@@ -8,6 +8,10 @@
 
 * 当前仅支持`Vim`键位. 如果有兴趣, 欢迎添加`Emacs`键位.
 
+```bash
+npm install
+gulp bundle
+```
 
 ## 动力
 

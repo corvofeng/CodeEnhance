@@ -11,12 +11,13 @@ import 'codemirror/keymap/vim'
 import 'codemirror/keymap/emacs'
 import 'codemirror/keymap/sublime'
 
-// addons
+// Code highlight
+import CodeMirrorHLClike from 'codemirror/mode/clike/clike'
+import CodeMirrorHLGO from 'codemirror/mode/go/go'
 
+// addons
 import CodeMirrorDialog from 'codemirror/addon/dialog/dialog'
 import 'codemirror/addon/dialog/dialog.css'
-
-
 
 
 export default CodeMirror

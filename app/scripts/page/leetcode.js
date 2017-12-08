@@ -22,7 +22,6 @@ var onEventCapture = function () {
 }
 
 var oldCmDiv = document.getElementsByClassName('CodeMirror')[1]
-while (typeof oldCmDiv.CodeMirror == "undefined") { }
 
 var oldCm = oldCmDiv.CodeMirror
 console.log(oldCm)
