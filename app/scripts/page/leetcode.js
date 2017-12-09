@@ -1,7 +1,9 @@
 'use strict'
 
 import CodeMirror from '../util/imports'
-import {defaultOption} from '../util/config'
+import {
+  defaultOption
+} from '../util/config'
 
 console.log("Code Mirror embed")
 
@@ -21,6 +23,59 @@ var onEventCapture = function () {
 
 }
 
+var getLanguage = function () {
+  return document.getElementsByClassName('Select-value')[0].innerText
+}
+
+var bindRequest = function () {
+
+}
+
+var getTopicCode = function() {
+
+}
+
+/**
+ * a = ["cpp", "java", "python", "python3", "c", "csharp", "javascript", "ruby", "swift", "golang", "bash", "scala", "kotlin"]
+ * s = ["text/x-c++src", "text/x-java", "text/x-python", "text/x-python", "text/x-c", "text/x-csharp", "text/javascript", "text/x-ruby", "text/x-swift", "text/x-go", "text/x-sh", "text/x-scala", "text/x-kotlin"]
+ * l = ["C++", "Java", "Python", "Python3", "C", "C#", "JavaScript", "Ruby", "Swift", "Go", "Bash", "Scala", "Kotlin"]
+ * 恢复LeetCode的初始代码, 此操作将会与button功能结合
+ * : /problems/{TopicID}/code-definitions/{code}/
+ * 
+ *  $.ajax({
+ *    type : "GET",  //提交方式
+ *    url : "https://leetcode.com/problems/101/code-definitions/cpp/",//路径
+ *    
+ *    success : function(result) {//返回数据根据结果进行相应的处理
+ *
+ *    }
+ * });
+ * 
+ */
+var reSetDefaultCode= function () {
+
+  $.ajax({
+    type: "GET", //提交方式
+    url: `${window.document.URL}cpp/`, //路径
+
+    success: function (result) { //返回数据根据结果进行相应的处理
+      console.log(result['code'])
+      myCodeMirror.doc.setValue(result['code'])
+    },
+    error: function () {
+      console.log('error')
+      console.log(arguments)
+    }
+  });
+
+}
+
+var Lang2Req = {
+  'C++': 'cpp',
+  'Go': 'golang',
+}
+
+
 var oldCmDiv = document.getElementsByClassName('CodeMirror')[1]
 
 var oldCm = oldCmDiv.CodeMirror
@@ -28,6 +83,16 @@ console.log(oldCm)
 
 oldCmDiv.style.display = 'none'
 defaultOption.value = oldCm.value
+
+/*
+var fx = function() {
+  console.log(arguments)
+  oldCm.doc.setValue(arguments)
+}
+*/
+
+//oldCm.doc.setValue = fx
+
 
 // cm.CodeMirror.setOption('theme', 'monokai');
 //cm.setOption('keyMap', 'vim');
@@ -45,7 +110,9 @@ oldCm.getValue = function () {
 }
 myCodeMirror.on('change', function (cm) {
   oldCm.doc.setValue(cm.getValue())
-  oldCm.replaceRange("foo\n", { line: 0 });
+  oldCm.replaceRange("foo\n", {
+    line: 0
+  });
 })
 
 myCodeMirror.save = function () {
@@ -59,7 +126,7 @@ $("reset-btn btn btn-default").on("click",function(){
 */
 
 myCodeMirror.setOption("extraKeys", {
-  Tab: function (cm) {  // 使用空格缩进
+  Tab: function (cm) { // 使用空格缩进
     var unit = cm.getOption("indentUnit");
     var col = cm.getCursor().ch;
     var spaces = Array(unit + 1 - col % unit).join(" ");
