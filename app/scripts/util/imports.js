@@ -19,5 +19,10 @@ import CodeMirrorHLGO from 'codemirror/mode/go/go'
 import CodeMirrorDialog from 'codemirror/addon/dialog/dialog'
 import 'codemirror/addon/dialog/dialog.css'
 
+// themes
+import 'codemirror/theme/eclipse.css'
+import 'codemirror/theme/monokai.css'
+import 'codemirror/theme/night.css'
+import 'codemirror/theme/solarized.css'
 
 export default CodeMirror

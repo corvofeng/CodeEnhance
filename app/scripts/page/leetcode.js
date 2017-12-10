@@ -4,6 +4,7 @@ import CodeMirror from '../util/imports'
 import {
   defaultOption
 } from '../util/config'
+import { debug } from 'util';
 
 console.log("Code Mirror embed")
 
@@ -70,18 +71,12 @@ var reSetDefaultCode= function () {
 
 }
 
-var Lang2Req = {
-  'C++': 'cpp',
-  'Go': 'golang',
-}
-
-
 var oldCmDiv = document.getElementsByClassName('CodeMirror')[1]
 
 var oldCm = oldCmDiv.CodeMirror
-console.log(oldCm)
 
 oldCmDiv.style.display = 'none'
+console.log(oldCm.doc.getValue())
 defaultOption.value = oldCm.value
 
 /*
@@ -100,14 +95,57 @@ oldCm.getWrapperElement().style.fontSize = '18px'
 oldCm.getWrapperElement().style.fontFamily = 'Consolas, Source Code Pro'
 // CodeMirror.keyMap.default["Tab"] = "indentMore";
 
-var input = document.createElement('textarea');
-var reactCM = document.getElementsByClassName("ReactCodeMirror")[0]
-var myArea = reactCM.appendChild(input)
+/**
+ * 为旧有编辑器设置内容
+ * @param {object} cmObj 旧有的CodeMirror对象
+ * @param {*} v 新的文本内容
+ */
+function setOldCMValue(cmObj, v) {
+  cmObj.doc.setValue(v)
+  cmObj.replaceRange("foo", {line: 0})
+}
 
-var myCodeMirror = CodeMirror.fromTextArea(myArea, defaultOption)
+var c;
+/**
+ * Note: you may not do anything from a "beforeChange" handler that would 
+ * cause changes to the document or its visualization. Doing so will, 
+ * since this handler is called directly from the bowels of the 
+ * CodeMirror implementation, probably cause the editor to become corrupted.
+ * 
+ * change: After the docchanged.
+ */
+oldCm.on('change', function(val, obj) {
+  console.log(val); 
+  c = obj; 
+  console.log(obj);
+  changeTxt(obj)
+})
+
+function changeTxt(obj) {
+  console.log("change Txt", obj)
+}
+
+var myCodeMirror;
+
+/**
+ * 初始化新的编辑器
+ */
+function initNewCM() {
+  var input = document.createElement('textarea');
+  var reactCM = document.getElementsByClassName("ReactCodeMirror")[0]
+  var myArea = reactCM.appendChild(input)
+
+  console.log(defaultOption)
+  myCodeMirror = CodeMirror.fromTextArea(myArea, defaultOption)
+}
+
+initNewCM()
+
+/*
 oldCm.getValue = function () {
   return myCodeMirror.getValue()
 }
+myCodeMirror.replaceRange
 myCodeMirror.on('change', function (cm) {
   oldCm.doc.setValue(cm.getValue())
   oldCm.replaceRange("foo\n", {
@@ -118,6 +156,7 @@ myCodeMirror.on('change', function (cm) {
 myCodeMirror.save = function () {
   oldCm.save()
 }
+*/
 
 /*
 $("reset-btn btn btn-default").on("click",function(){
