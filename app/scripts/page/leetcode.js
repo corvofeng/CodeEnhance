@@ -1,39 +1,14 @@
 'use strict'
 
 import CodeMirror from '../util/imports'
-import {
-  defaultOption
-} from '../util/config'
-import { debug } from 'util';
+import {defaultOption} from '../util/config'
+import {debug} from 'util';
+import {CodeSync} from '../util/sync_maintainer'
 
 console.log("Code Mirror embed")
 
 var onInit = function () {
-
-}
-
-var onGetOption = function () {
-
-}
-
-var onRefreshOption = function () {
-
-}
-
-var onEventCapture = function () {
-
-}
-
-var getLanguage = function () {
   return document.getElementsByClassName('Select-value')[0].innerText
-}
-
-var bindRequest = function () {
-
-}
-
-var getTopicCode = function() {
-
 }
 
 /**
@@ -53,7 +28,7 @@ var getTopicCode = function() {
  * });
  * 
  */
-var reSetDefaultCode= function () {
+var reSetDefaultCode = function () {
 
   $.ajax({
     type: "GET", //提交方式
@@ -79,17 +54,9 @@ oldCmDiv.style.display = 'none'
 console.log(oldCm.doc.getValue())
 defaultOption.value = oldCm.value
 
-/*
-var fx = function() {
-  console.log(arguments)
-  oldCm.doc.setValue(arguments)
-}
-*/
-
 //oldCm.doc.setValue = fx
 
 
-// cm.CodeMirror.setOption('theme', 'monokai');
 //cm.setOption('keyMap', 'vim');
 oldCm.getWrapperElement().style.fontSize = '18px'
 oldCm.getWrapperElement().style.fontFamily = 'Consolas, Source Code Pro'
@@ -100,10 +67,11 @@ oldCm.getWrapperElement().style.fontFamily = 'Consolas, Source Code Pro'
  * @param {object} cmObj 旧有的CodeMirror对象
  * @param {*} v 新的文本内容
  */
-function setOldCMValue(cmObj, v) {
-  cmObj.doc.setValue(v)
-  cmObj.replaceRange("foo", {line: 0})
+function setOldCMValue(v) {
+  this.doc.setValue(v)
+  this.replaceRange("foo", {line: 0})
 }
+
 
 var c;
 /**
@@ -114,12 +82,7 @@ var c;
  * 
  * change: After the docchanged.
  */
-oldCm.on('change', function(val, obj) {
-  console.log(val); 
-  c = obj; 
-  console.log(obj);
-  changeTxt(obj)
-})
+
 
 function changeTxt(obj) {
   console.log("change Txt", obj)
@@ -137,6 +100,28 @@ function initNewCM() {
 
   console.log(defaultOption)
   myCodeMirror = CodeMirror.fromTextArea(myArea, defaultOption)
+  myCodeMirror.setMustValue = myCodeMirror.setValue
+  oldCm.setMustValue = setOldCMValue;
+
+  CodeSync.addWraper(oldCm)
+  CodeSync.addWraper(myCodeMirror)
+
+  oldCm.on('beforeChange', function(cm, obj) {
+    console.log('[oldCM] before change', cm); 
+    console.log('[oldCM] before change', cm); 
+    // c = obj; 
+    CodeSync.onUpdate(cm, obj, myCodeMirror, null)
+    //changeTxt(obj)
+  })
+
+  myCodeMirror.on('beforeChange', function(cm, obj) {
+    // console.log(val); 
+    // c = obj; 
+    console.log('[NewCM] before change', cm); 
+    console.log('[NewCM] before change', obj); 
+    CodeSync.onUpdate(cm, obj, oldCm, null)
+    //changeTxt(obj)
+  })
 }
 
 initNewCM()
