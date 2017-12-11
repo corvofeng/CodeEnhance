@@ -8,6 +8,7 @@ var defaultOption = {
     "lineNumbers": true,
     "lineWrapping": true,
     "indentWithTabs": false,
+    "indentUnit": 4,
     "autofocus": true,
     "tabSize": 4,
     "gutters": [

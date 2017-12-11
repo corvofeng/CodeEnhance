@@ -47,14 +47,11 @@ var reSetDefaultCode = function () {
 }
 
 var oldCmDiv = document.getElementsByClassName('CodeMirror')[1]
-
 var oldCm = oldCmDiv.CodeMirror
-
 oldCmDiv.style.display = 'none'
+
 console.log(oldCm.doc.getValue())
 defaultOption.value = oldCm.value
-
-//oldCm.doc.setValue = fx
 
 
 //cm.setOption('keyMap', 'vim');
@@ -107,20 +104,11 @@ function initNewCM() {
   CodeSync.addWraper(myCodeMirror)
 
   oldCm.on('beforeChange', function(cm, obj) {
-    console.log('[oldCM] before change', cm); 
-    console.log('[oldCM] before change', cm); 
-    // c = obj; 
     CodeSync.onUpdate(cm, obj, myCodeMirror, null)
-    //changeTxt(obj)
   })
 
   myCodeMirror.on('beforeChange', function(cm, obj) {
-    // console.log(val); 
-    // c = obj; 
-    console.log('[NewCM] before change', cm); 
-    console.log('[NewCM] before change', obj); 
     CodeSync.onUpdate(cm, obj, oldCm, null)
-    //changeTxt(obj)
   })
 }
 
