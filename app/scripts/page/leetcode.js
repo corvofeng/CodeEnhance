@@ -15,36 +15,7 @@ var onInit = function () {
  * a = ["cpp", "java", "python", "python3", "c", "csharp", "javascript", "ruby", "swift", "golang", "bash", "scala", "kotlin"]
  * s = ["text/x-c++src", "text/x-java", "text/x-python", "text/x-python", "text/x-c", "text/x-csharp", "text/javascript", "text/x-ruby", "text/x-swift", "text/x-go", "text/x-sh", "text/x-scala", "text/x-kotlin"]
  * l = ["C++", "Java", "Python", "Python3", "C", "C#", "JavaScript", "Ruby", "Swift", "Go", "Bash", "Scala", "Kotlin"]
- * 恢复LeetCode的初始代码, 此操作将会与button功能结合
- * : /problems/{TopicID}/code-definitions/{code}/
- * 
- *  $.ajax({
- *    type : "GET",  //提交方式
- *    url : "https://leetcode.com/problems/101/code-definitions/cpp/",//路径
- *    
- *    success : function(result) {//返回数据根据结果进行相应的处理
- *
- *    }
- * });
- * 
  */
-var reSetDefaultCode = function () {
-
-  $.ajax({
-    type: "GET", //提交方式
-    url: `${window.document.URL}cpp/`, //路径
-
-    success: function (result) { //返回数据根据结果进行相应的处理
-      console.log(result['code'])
-      myCodeMirror.doc.setValue(result['code'])
-    },
-    error: function () {
-      console.log('error')
-      console.log(arguments)
-    }
-  });
-
-}
 
 var oldCmDiv = document.getElementsByClassName('CodeMirror')[1]
 var oldCm = oldCmDiv.CodeMirror
@@ -55,8 +26,6 @@ defaultOption.value = oldCm.value
 
 
 //cm.setOption('keyMap', 'vim');
-oldCm.getWrapperElement().style.fontSize = '18px'
-oldCm.getWrapperElement().style.fontFamily = 'Consolas, Source Code Pro'
 // CodeMirror.keyMap.default["Tab"] = "indentMore";
 
 /**
@@ -67,22 +36,6 @@ oldCm.getWrapperElement().style.fontFamily = 'Consolas, Source Code Pro'
 function setOldCMValue(v) {
   this.doc.setValue(v)
   this.replaceRange("foo", {line: 0})
-}
-
-
-var c;
-/**
- * Note: you may not do anything from a "beforeChange" handler that would 
- * cause changes to the document or its visualization. Doing so will, 
- * since this handler is called directly from the bowels of the 
- * CodeMirror implementation, probably cause the editor to become corrupted.
- * 
- * change: After the docchanged.
- */
-
-
-function changeTxt(obj) {
-  console.log("change Txt", obj)
 }
 
 var myCodeMirror;
@@ -99,6 +52,13 @@ function initNewCM() {
   myCodeMirror = CodeMirror.fromTextArea(myArea, defaultOption)
   myCodeMirror.setMustValue = myCodeMirror.setValue
   oldCm.setMustValue = setOldCMValue;
+
+  // set Style
+  myCodeMirror.getWrapperElement().style.fontSize = '18px'
+  myCodeMirror.getWrapperElement().style.fontFamily = 'Consolas, Source Code Pro'
+
+  let oldV = oldCm.doc.getValue()
+  myCodeMirror.doc.setValue(oldV)
 
   CodeSync.addWraper(oldCm)
   CodeSync.addWraper(myCodeMirror)
@@ -145,4 +105,3 @@ myCodeMirror.setOption("extraKeys", {
     cm.replaceSelection(spaces);
   }
 });
-  
