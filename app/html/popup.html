@@ -6,16 +6,33 @@
   <link rel="stylesheet" type="text/css" href="../styles/main.css">
 </head>
 
+<!-- TODO: 修改为Material Design样式 -->
+
 <body>
 
-  <div name="save" style="display:none;">
-    saved !!
+  <div name="save" style="visibility: hidden;">
+    saved !!!
   </div>
 
-  <input type="checkbox" name="is_enable" id="leet_enable"> Enable <br>
-  <select name="font_size" id="leet_font"></select>
-  <select name="color_scheme" id="leet_theme"></select>
-  <select name="font_face" id="leet_font_face"></select>
+  <div class="height-fix">
+    <input type="checkbox" name="is_enable" id="leet_enable">
+    <span>Enable</span>
+  </div>
+
+  <div class="height-fix">
+    <span class="my-select-span">字体大小:</span>
+    <select name="font_size" id="leet_font" class="my-select"></select>
+  </div>
+
+  <div class="height-fix">
+    <span class="my-select-span">主题选择:</span>
+    <select name="color_scheme" id="leet_theme" class="my-select"></select>
+  </div>
+
+  <div class="height-fix">
+    <span class="my-select-span">字体:</span>
+    <select name="font_face" id="leet_font_face" class="my-select"></select>
+  </div>
 
 </body>
 

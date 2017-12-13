@@ -77,6 +77,11 @@ ENUM_COLORSCHEME = [
   'chaos',
   'chrome',
   'github',
+],
+ENUM_KEYMAP = [
+  'vim',
+  'sublime',
+  'emacs'
 ];
 
 // our event bus

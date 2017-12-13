@@ -114,9 +114,9 @@ function enableChange() {
 
 function msgSave() {
   var save = getInput('save');
-  save.style.display='block';
+  save.style.visibility='visible';
   window.setTimeout(function() {
-    save.style.display='none';
+    save.style.visibility='hidden';
   }, 800);
   submitChange();
 }
