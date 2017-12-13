@@ -1,0 +1,43 @@
+<head>
+	<script src="https://unpkg.com/dropbox/dist/Dropbox-sdk.min.js"></script>
+	<script>
+		var dbx = new Dropbox(
+		{ 
+			accessToken: 'TOKEN'}
+			);
+		dbx.filesListFolder({path: ''})
+		.then(function(response) {
+			console.log(response);
+		//	displayFiles(response.entries);
+		//	console.log(response);
+		})
+		.catch(function(error) {
+			console.log(error);
+		});
+
+		dbx.filesUpload({ path: '/hello.js', contents: 'hello world'})
+		.then(function (response) {
+			console.log(response);
+		})
+		.catch(function (error) {
+			console.error(error);
+		});
+
+
+		function displayFiles(files) {
+				/*
+			var filesList = document.getElementById('files');
+			var li;
+			for (var i = 0; i < files.length; i++) {
+				li = document.createElement('li');
+				li.appendChild(document.createTextNode(files[i].name));
+				filesList.appendChild(li);
+			}
+				*/
+		}
+	</script>
+</head>
+
+<body>
+	<div id="run"> xttt </div>
+</body>

@@ -140,17 +140,17 @@ chrome.extension.sendMessage({ method: "isEnabled", url: currentDomain }, functi
   // we don't want to do anything if the domain is not enabled
   console.log(response)
   if (!response) { return }
-  //leetcodeRun()
+
   loadHostJs()
   /*
-  addons.addAddon('search')
-  addons.addAddon('dialog')
-  addons.addAddon('hint')
-  addons.addAddon('clike')
-  var dep = addons.getAddon()
-  console.log(dep)
-  loadJS(dep.js, 0, loadHostJs)
-  loadCSS(dep.css, 0)
+    addons.addAddon('search')
+    addons.addAddon('dialog')
+    addons.addAddon('hint')
+    addons.addAddon('clike')
+    var dep = addons.getAddon()
+    console.log(dep)
+    loadJS(dep.js, 0, loadHostJs)
+    loadCSS(dep.css, 0)
   */
 });
 
