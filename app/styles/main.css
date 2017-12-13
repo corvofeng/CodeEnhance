@@ -2,11 +2,11 @@ body {
   width: 220px;
   font-size: 100%;
   color: #303942;
-  font-family: "Microsoft YaHei";
+  font-family: "Microsoft YaHei", "Consolas";
 }
 
 .height-fix {
-  height: 20vh;
+  height: 40px;
 }
 
 

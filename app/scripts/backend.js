@@ -44,6 +44,7 @@ defaults = {
   font_size: 15,
   color_scheme: 'xcode',
   font_face : 'Source Code Pro',
+  key_map: 'vim',
   show_invisibles: false,
   is_enable: true
 };
