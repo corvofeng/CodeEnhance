@@ -1,5 +1,8 @@
 # LeetEnhance
 
+## 2017-12-14 LeetCode添加了Vim功能, 我会继续为编辑器添加新的功能, 希望大家能喜欢他.
+
+
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badge/)    
 
 # LeetCode更换网页编辑器为`CodeMirror`, 我正在尝试写一个新的扩展.

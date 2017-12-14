@@ -1,5 +1,7 @@
 # LeetEnhance
 
+## 2017-12-14 LEETCODE ADD VIM MODE, AND I WILL ADD OTHER FUNCTION, HOPE YOU LIKE THIS.
+
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badge/)    
 
 > A simple extension enhances the LeetCode editor function
@@ -9,7 +11,6 @@
 
 > I'm sorry for my English expression. If you have any questions, please 
 > contact me or create an issue.
-
 
 ```bash
 npm install

@@ -2,9 +2,6 @@
 
 
 var defaultOption = {
-    "mode": "text/x-c++src",
-    "keyMap": "vim",
-    "theme": "monokai",
     "lineNumbers": true,
     "lineWrapping": true,
     "indentWithTabs": false,
@@ -19,6 +16,27 @@ var defaultOption = {
     "matchBrackets": true,
     "value": null,
     "scrollbarStyle": null,
+
+
 }
 
-export {defaultOption}
+var dynamicOption = {
+    "font_face": "Source Code Pro",
+    "font_size": "16",
+    "keyMap": "vim",
+    "theme": "monokai",
+    "mode": "text/x-c++src",
+    "dropbox_token": null,
+
+    read_option: function (params) {
+     // {"color_scheme":"solarized_light",
+     // "font_face":"monospace","font_size":"16",
+     // "initialized":"true","is_enable":"true","key_map":"vim","show_invisibles":"false"} 
+      this.theme = params.color_scheme
+      this.keyMap = params.key_map
+      this.font_face = params.font_face
+      this.font_size = params.font_size
+    }
+}
+
+export {defaultOption, dynamicOption}

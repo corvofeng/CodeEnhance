@@ -178,10 +178,6 @@ isEnabled = function (request) {
 };
 
 getOptions = function(request) {
-  if (!isEnabled(request)) {
-    return undefined;
-  }
-
   return localStorage; 
 }
 

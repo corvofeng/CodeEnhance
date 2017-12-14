@@ -14,7 +14,6 @@ var Editors = {},
 //import CodeMirror from 'codemirror/lib/codemirror'
 //import {leetcodeRun} from './page/leetcode'
 
-
 /**
  * <script src="codemirror.js"></script>
  * Load "in-dom" js resources to get around
@@ -52,17 +51,33 @@ injectStyleSheet = function(url) {
                             :document.documentElement.appendChild(s)
 }
 
-/* ==========================================================================
-   Page Interaction
-   ========================================================================== */
-// see if our page is enabled
 currentDomain = window.location.origin + window.location.pathname;
+/**
+ * 检查网页是否在支持列表中, 并返回网页类型, 而后将会导入不同的js
+ */
+chrome.extension.sendMessage({ method: "isEnabled", url: currentDomain }, function (response) {
+  // we don't want to do anything if the domain is not enabled
+  console.log(response)
+  if (!response) { return }
+  chrome.extension.sendMessage({method: "getOptions"}, function(response){
+    console.log(response)
 
-/*
-injectScript("/scripts/keybindings/codemirror/codemirror.js", function() {
-  injectScript('/scripts/keybindings/codemirror/vim.js');
+    // 利用Cookie设置全局配置
+    setCookie("CM_OPTION", JSON.stringify(response))
+    loadHostJs()
+  })
 });
-*/
+
+
+var loadHostJs = function() {
+  if(host2js[window.location.host]) {
+    injectScript(host2js[window.location.host], function () {
+      console.log("load js ok")
+    })
+  } else { // 需要支持的网页, 发送开发者
+    console.log("cur host needed to be added ", window.location.host)
+  }
+}
 
 // 不同站点与其对应js
 var host2js = {
@@ -70,23 +85,34 @@ var host2js = {
   "www.nowcoder.com": "/dest/nowcoder.js",
 }
 
-var addonSource = {
-  "search": {
-    "js": ['scripts/cm/addon/search/search.js', "scripts/cm/addon/search/searchcursor.js"],
-    "css": []
-  },
-  "dialog": {
-    "js": ['scripts/cm/addon/dialog/dialog.js'],
-    "css": ['scripts/cm/addon/dialog/dialog.css']
-  },
-  "hint": {
-    "js": ['scripts/cm/addon/hint/show-hint.js', 'scripts/cm/addon/hint/anyword-hint.js'],
-    "css": ['scripts/cm/addon/hint/show-hint.css']
-  },
-  "clike": {
-    "js": ["scripts/cm/mode/clike/clike.js"]
-  }
+function setCookie(cname, cvalue, exdays) {
+  var d = new Date();
+  d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+  var expires = "expires=" + d.toUTCString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
+
+
+//
+// Bellow will NO USE !!!
+// 
+
+
+
+/* ==========================================================================
+   Page Interaction
+   ========================================================================== */
+// see if our page is enabled
+
+
+
+/*
+injectScript("/scripts/keybindings/codemirror/codemirror.js", function() {
+  injectScript('/scripts/keybindings/codemirror/vim.js');
+});
+*/
+
+
 
 /**
  * 这其实也是一种js的单例模式, 同时只能通过addons这个对象来操作其中的数据
@@ -116,43 +142,12 @@ var addons = (function() {
 })()
 
 
-var loadHostJs = function() {
-  if(host2js[window.location.host]) {
-    injectScript(host2js[window.location.host], function () {
-      console.log("load js ok")
-    })
-  } else { // 需要支持的网页, 发送开发者
-    console.log("cur host needed to be added ", window.location.host)
-  }
-}
-
 var injectRequire = function() {
   var s = document.createElement('script')
   s.src = chrome.runtime.getURL('scripts/require.js')
   document.head == null ? document.head.appendChild(s) 
                           : document.documentElement.appendChild(s)
 }
-
-/**
- * 检查网页是否在支持列表中, 并返回网页类型, 而后将会导入不同的js
- */
-chrome.extension.sendMessage({ method: "isEnabled", url: currentDomain }, function (response) {
-  // we don't want to do anything if the domain is not enabled
-  console.log(response)
-  if (!response) { return }
-
-  loadHostJs()
-  /*
-    addons.addAddon('search')
-    addons.addAddon('dialog')
-    addons.addAddon('hint')
-    addons.addAddon('clike')
-    var dep = addons.getAddon()
-    console.log(dep)
-    loadJS(dep.js, 0, loadHostJs)
-    loadCSS(dep.css, 0)
-  */
-});
 
 var loadCSS = function(sources, current) {
   current = typeof current === 'undefined' ? 0 : current

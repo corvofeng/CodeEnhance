@@ -1,11 +1,12 @@
 'use strict'
 
+
 import CodeMirror from '../util/imports'
-import {defaultOption} from '../util/config'
+import {defaultOption, dynamicOption} from '../util/config'
 import {debug} from 'util';
 import {CodeSync} from '../util/sync_maintainer'
+import {setCookie, getCookie} from '../util/cookie'
 
-console.log("Code Mirror embed")
 
 var onInit = function () {
   return document.getElementsByClassName('Select-value')[0].innerText
@@ -28,15 +29,15 @@ defaultOption.value = oldCm.value
 //cm.setOption('keyMap', 'vim');
 // CodeMirror.keyMap.default["Tab"] = "indentMore";
 
-/**
- * 为旧有编辑器设置内容
- * @param {object} cmObj 旧有的CodeMirror对象
- * @param {*} v 新的文本内容
- */
-function setOldCMValue(v) {
-  this.doc.setValue(v)
-  this.replaceRange("foo", {line: 0})
-}
+///**
+// * 为旧有编辑器设置内容
+// * @param {object} cmObj 旧有的CodeMirror对象
+// * @param {*} v 新的文本内容
+// */
+//function setOldCMValue(v) {
+//  this.doc.setValue(v)
+//  this.replaceRange("foo", {line: 0})
+//}
 
 var myCodeMirror;
 
@@ -48,14 +49,15 @@ function initNewCM() {
   var reactCM = document.getElementsByClassName("ReactCodeMirror")[0]
   var myArea = reactCM.appendChild(input)
 
-  console.log(defaultOption)
+  // console.log(defaultOption)
   myCodeMirror = CodeMirror.fromTextArea(myArea, defaultOption)
-  myCodeMirror.setMustValue = myCodeMirror.setValue
-  oldCm.setMustValue = setOldCMValue;
+  // myCodeMirror.setMustValue = myCodeMirror.setValue
+  // oldCm.setMustValue = setOldCMValue;
 
+  let option = getCookie("CM_OPTION")
+  console.log("LEETCODE: ", option)
   // set Style
-  myCodeMirror.getWrapperElement().style.fontSize = '18px'
-  myCodeMirror.getWrapperElement().style.fontFamily = 'Consolas, Source Code Pro'
+  dynamicOption.read_option(JSON.parse(option))
 
   let oldV = oldCm.doc.getValue()
   myCodeMirror.doc.setValue(oldV)
@@ -70,9 +72,20 @@ function initNewCM() {
   myCodeMirror.on('beforeChange', function(cm, obj) {
     CodeSync.onUpdate(cm, obj, oldCm, null)
   })
+  setDynamicOptions(myCodeMirror)
 }
 
 initNewCM()
+
+function setDynamicOptions(CMObj) {
+
+  console.log("set dynamic option", dynamicOption)
+
+  CMObj.getWrapperElement().style.fontSize = `${dynamicOption.font_size}px`
+  CMObj.getWrapperElement().style.fontFamily = dynamicOption.font_face
+  CMObj.setOption('keyMap', dynamicOption.keyMap)
+  CMObj.setOption('theme', dynamicOption.theme)
+}
 
 /*
 oldCm.getValue = function () {
