@@ -18,6 +18,15 @@ import CodeMirrorHLGO from 'codemirror/mode/go/go'
 // addons
 import CodeMirrorDialog from 'codemirror/addon/dialog/dialog'
 import 'codemirror/addon/dialog/dialog.css'
+import CodeMirrorCloseBrackets from 'codemirror/addon/edit/closebrackets'
+
+import CodeMirrorBrackFolder from 'codemirror/addon/fold/brace-fold'
+import CodeMirrorFoldCode from 'codemirror/addon/fold/foldcode'
+import CodeMirrorFoldGutter from 'codemirror/addon/fold/foldgutter'
+import CodeMirrorFoldComment from 'codemirror/addon/fold/comment-fold'
+import CodeMirrorFoldIndent from 'codemirror/addon/fold/indent-fold'
+
+import 'codemirror/addon/fold/foldgutter.css'
 
 // themes
 import 'codemirror/theme/eclipse.css'

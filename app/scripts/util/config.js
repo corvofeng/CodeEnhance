@@ -12,9 +12,10 @@ var defaultOption = {
       "CodeMirror-linenumbers",
       "CodeMirror-foldgutter"
     ],
+    'foldGutter': true,
+    'autoCloseBrackets': true,
     "styleActiveLine": true,
     "matchBrackets": true,
-    "value": null,
     "scrollbarStyle": null,
 }
 
