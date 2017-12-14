@@ -13,9 +13,6 @@ var onInit = function () {
 }
 
 /**
- * a = ["cpp", "java", "python", "python3", "c", "csharp", "javascript", "ruby", "swift", "golang", "bash", "scala", "kotlin"]
- * s = ["text/x-c++src", "text/x-java", "text/x-python", "text/x-python", "text/x-c", "text/x-csharp", "text/javascript", "text/x-ruby", "text/x-swift", "text/x-go", "text/x-sh", "text/x-scala", "text/x-kotlin"]
- * l = ["C++", "Java", "Python", "Python3", "C", "C#", "JavaScript", "Ruby", "Swift", "Go", "Bash", "Scala", "Kotlin"]
  */
 
 var oldCmDiv = document.getElementsByClassName('CodeMirror')[1]
@@ -85,6 +82,7 @@ function setDynamicOptions(CMObj) {
   CMObj.getWrapperElement().style.fontFamily = dynamicOption.font_face
   CMObj.setOption('keyMap', dynamicOption.keyMap)
   CMObj.setOption('theme', dynamicOption.theme)
+  CMObj.setOption('mode', dynamicOption.mode)
 }
 
 /*

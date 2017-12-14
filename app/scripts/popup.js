@@ -5,13 +5,15 @@ ENUM_FONTSIZE = chrome.extension.getBackgroundPage().ENUM_FONTSIZE;
 ENUM_COLORSCHEME = chrome.extension.getBackgroundPage().ENUM_COLORSCHEME;
 ENUM_FONTFACE = chrome.extension.getBackgroundPage().ENUM_FONTFACE;
 ENUM_KEYMAP = chrome.extension.getBackgroundPage().ENUM_KEYMAP;
+ENUM_LANG = chrome.extension.getBackgroundPage().ENUM_LANG; 
 
-var settingInputs = ['font_size', 'color_scheme', 'font_face', 'key_map', 'is_enable'];
+var settingInputs = ['font_size', 'color_scheme', 'font_face', 'key_map', 'lang', 'is_enable'];
 var valueDefault = {
   'font_face' : ENUM_FONTFACE,
   'font_size' : ENUM_FONTSIZE,
   'color_scheme': ENUM_COLORSCHEME,
   'key_map': ENUM_KEYMAP,
+  'lang': ENUM_LANG,
 }
 
 function getCurrentUrl(callback) {
@@ -118,6 +120,14 @@ function keyMapChange() {
   msgSave();
 }
 
+function langChange() {
+  var i = this.selectedIndex;
+  var l = this.children[i].value;
+  options("lang", l);
+  msgSave();
+}
+
+
 function enableChange() {
   var i = this;
   options("is_enable", this.checked);
@@ -139,6 +149,7 @@ document.querySelector('#leet_font').addEventListener('change', fontChange);
 document.querySelector('#leet_theme').addEventListener('change', themeChange);
 document.querySelector('#leet_font_face').addEventListener('change', fontFaceChange);
 document.querySelector('#leet_key_map').addEventListener('change', keyMapChange);
+document.querySelector('#leet_lang').addEventListener('change', langChange);
 document.querySelector('#leet_enable').addEventListener('click', enableChange);
 
 

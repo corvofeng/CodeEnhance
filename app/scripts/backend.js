@@ -45,6 +45,7 @@ defaults = {
   color_scheme: 'xcode',
   font_face : 'Source Code Pro',
   key_map: 'vim',
+  lang: 'C++',
   show_invisibles: false,
   is_enable: true
 };
@@ -83,7 +84,24 @@ ENUM_KEYMAP = [
   'vim',
   'sublime',
   'emacs'
+],
+ENUM_LANG = [
+  "C++",
+  "Java",
+  "Python",
+  "Python3",
+  "C",
+  "C#",
+  "JavaScript",
+  "Ruby",
+  "Swift",
+  "Go",
+  "Bash",
+  "Scala",
+  "Kotlin"
 ];
+
+;
 
 // our event bus
 // inspired by Vimium

@@ -16,8 +16,19 @@ var defaultOption = {
     "matchBrackets": true,
     "value": null,
     "scrollbarStyle": null,
+}
 
+// a = ["cpp", "java", "python", "python3", "c", "csharp", "javascript", "ruby", "swift", "golang", "bash", "scala", "kotlin"]
+let mode = ["text/x-c++src", "text/x-java", "text/x-python", "text/x-python", "text/x-c", "text/x-csharp", "text/javascript", "text/x-ruby", "text/x-swift", "text/x-go", "text/x-sh", "text/x-scala", "text/x-kotlin"]
+let lang = ["C++", "Java", "Python", "Python3", "C", "C#", "JavaScript", "Ruby", "Swift", "Go", "Bash", "Scala", "Kotlin"]
 
+function getMode(l) {
+  let i = 0;
+  for (; i < lang.length; i++)
+    if (lang[i] == l)
+      break
+
+  return mode[i]
 }
 
 var dynamicOption = {
@@ -36,6 +47,7 @@ var dynamicOption = {
       this.keyMap = params.key_map
       this.font_face = params.font_face
       this.font_size = params.font_size
+      this.mode = getMode(params.lang)
     }
 }
 
