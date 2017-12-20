@@ -8,33 +8,10 @@ import {CodeSync} from '../util/sync_maintainer'
 import {setCookie, getCookie} from '../util/cookie'
 
 
+export {CodeMirror}
 var onInit = function () {
   return document.getElementsByClassName('Select-value')[0].innerText
 }
-
-/**
- */
-
-var oldCmDiv = document.getElementsByClassName('CodeMirror')[1]
-var oldCm = oldCmDiv.CodeMirror
-oldCmDiv.style.display = 'none'
-
-console.log(oldCm.doc.getValue())
-defaultOption.value = oldCm.value
-
-
-//cm.setOption('keyMap', 'vim');
-// CodeMirror.keyMap.default["Tab"] = "indentMore";
-
-///**
-// * 为旧有编辑器设置内容
-// * @param {object} cmObj 旧有的CodeMirror对象
-// * @param {*} v 新的文本内容
-// */
-//function setOldCMValue(v) {
-//  this.doc.setValue(v)
-//  this.replaceRange("foo", {line: 0})
-//}
 
 var myCodeMirror;
 
@@ -42,6 +19,16 @@ var myCodeMirror;
  * 初始化新的编辑器
  */
 function initNewCM() {
+
+  var oldCmDiv = document.getElementsByClassName('CodeMirror')[1]
+  var oldCm = oldCmDiv.CodeMirror
+  oldCmDiv.style.display = 'none'
+
+  console.log(oldCm.doc.getValue())
+
+  var t = document.getElementsByName('lc-codemirror')[0]
+  defaultOption.value = t.value
+
   var input = document.createElement('textarea');
   var reactCM = document.getElementsByClassName("ReactCodeMirror")[0]
   var myArea = reactCM.appendChild(input)
@@ -57,10 +44,15 @@ function initNewCM() {
   dynamicOption.read_option(JSON.parse(option))
 
   let oldV = oldCm.doc.getValue()
-  myCodeMirror.doc.setValue(oldV)
+  myCodeMirror.doc.setValue(t.value)
 
   CodeSync.addWraper(oldCm)
   CodeSync.addWraper(myCodeMirror)
+  /*
+  myCodeMirror.on('change', function(){
+    oldCm.setValue(myCodeMirror.getValue())
+  })
+  */
 
   oldCm.on('beforeChange', function(cm, obj) {
     CodeSync.onUpdate(cm, obj, myCodeMirror, null)
@@ -70,6 +62,7 @@ function initNewCM() {
     CodeSync.onUpdate(cm, obj, oldCm, null)
   })
   setDynamicOptions(myCodeMirror)
+  console.log("Init Over")
 }
 
 initNewCM()

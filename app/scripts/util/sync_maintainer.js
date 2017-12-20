@@ -24,6 +24,7 @@ var CodeSync = {
         if(this.inChange) { // 当前正在同步中, 不接受任何变化信号
             return
         }
+        console.log(ch1)
         if(! cm1.hasOwnProperty('changeState')) {
             throw new Error('The addWrapper must be called before update')
         }

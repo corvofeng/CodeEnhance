@@ -1,5 +1,8 @@
 # LeetEnhance
 
+## 2017-12-20 OOOHHH, after Leetcode modfiy the codemirror, I can't modify the
+Textarea, Maybe I will give up.
+
 ## 2017-12-14 LEETCODE ADD VIM MODE, AND I WILL ADD OTHER FUNCTION, HOPE YOU LIKE THIS.
 
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badge/)    
